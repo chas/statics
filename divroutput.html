@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Intelligence Report</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            text-align: left;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: top;
+            font-size: 0.85rem;
+        }
+        tr:hover {
+            background-color: #f1f4f9;
+        }
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+        .critical { background-color: #dc3545; color: white; }
+        .high { background-color: #fd7e14; color: white; }
+        .medium { background-color: #ffc107; color: #212529; }
+        .low { background-color: #6c757d; color: white; }
+        
+        .score-pill {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .cmdb-list {
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Security Intelligence Analysis</h1>
+    <p>Filtered by relevance and CMDB impact.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Priority</th>
+                <th>Score</th>
+                <th>Article Title & Source</th>
+                <th>Matched CMDB Entities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="priority-badge critical">Critical</span></td>
+                <td><span class="score-pill">9</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/cisa-flags-critical-asus-live-update.html" target="_blank">CISA Flags Critical ASUS Live Update Flaw After Evidence of Active Exploitation</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge critical">Critical</span></td>
+                <td><span class="score-pill">9</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/cisco-warns-of-active-attacks.html" target="_blank">Cisco Warns of Active Attacks Exploiting Unpatched 0-Day in AsyncOS Email Security Appliances</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">Secure Mail; Abnormal Security</td>
+            </tr>
+
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">8</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/the-case-for-dynamic-ai-saas-security.html" target="_blank">The Case for Dynamic AI-SaaS Security as Copilots Scale</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">Zoom Gov; Zoom; Slack; Microsoft 365 Platform; Salesforce CRM; ServiceNow...</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">7</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-recent-updates-break-azure-virtual-desktop-remoteapp-sessions/" target="_blank">Microsoft: Recent Windows updates break RemoteApp connections</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">Windows 11; Microsoft Windows Server</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">8</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/kimsuky-spreads-docswap-android-malware.html" target="_blank">Kimsuky Spreads DocSwap Android Malware via QR Phishing Posing as Delivery App</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">Android native mail app; ND Mobile App; Google Gemini App</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">8</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/amazon-ongoing-cryptomining-campaign-uses-hacked-aws-accounts/" target="_blank">Amazon: Ongoing cryptomining campaign uses hacked AWS accounts</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">AWS IaaS; GuardDuty; AWS EC2; AWS IAM</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">8</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/sonicwall-fixes-actively-exploited-cve.html" target="_blank">SonicWall Fixes Actively Exploited CVE-2025-40602 in SMA 100 Appliances</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge high">High</span></td>
+                <td><span class="score-pill">7</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/kimwolf-botnet-hijacks-18-million.html" target="_blank">Kimwolf Botnet Hijacks 1.8 Million Android TVs, Launches Large-Scale DDoS Attacks</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">Vitec IPTV; AWS AppStream; Wolfram Mathematica; WatchDog EX</td>
+            </tr>
+
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">5</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/nis2-compliance-how-to-get-passwords-and-mfa-right/" target="_blank">NIS2 compliance: How to get passwords and MFA right</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/hpe-oneview-flaw-rated-cvss-100-allows.html" target="_blank">HPE OneView Flaw Rated CVSS 10.0 Allows Unauthenticated Remote Code Execution</a><br>
+                    <small>Source: —</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">7</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/france-arrests-latvian-for-installing-malware-on-italian-ferry/" target="_blank">France arrests Latvian for installing malware on Italian ferry</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">Fleet Commander; Refworks; Buswhere</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">5</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/north-korea-linked-hackers-steal-202.html" target="_blank">North Korea-Linked Hackers Steal $2.02 Billion in 2025</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/hpe-warns-of-maximum-severity-rce-flaw-in-oneview-software/" target="_blank">HPE warns of maximum severity RCE flaw in OneView software</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">7</span></td>
+                <td>
+                    <a href="https://isc.sans.edu/diary/rss/32584" target="_blank">Positive trends related to public IP ranges from 2025</a><br>
+                    <small>Source: ISC SANS</small>
+                </td>
+                <td class="cmdb-list">IPWorks; AWS Route 53; DNS/DHCP</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/zeroday-cloud-hacking-event-awards-320-0000-for-11-zero-days/" target="_blank">Zeroday Cloud hacking event awards $320,0000</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/whatsapp-device-linking-abused-in-account-hijacking-attacks/" target="_blank">WhatsApp device linking abused</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/cisco-warns-of-unpatched-asyncos-zero-day-exploited-in-attacks/" target="_blank">Cisco warns of unpatched AsyncOS zero-day</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">Secure Mail; Abnormal Security; Virtru; Simphony</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-new-sma1000-zero-day-exploited-in-attacks/" target="_blank">Sonicwall warns of new SMA1000 zero-day</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge medium">Medium</span></td>
+                <td><span class="score-pill">6</span></td>
+                <td>
+                    <a href="https://isc.sans.edu/diary/rss/32578" target="_blank">Maybe a Little Bit More Interesting React2Shell Exploit</a><br>
+                    <small>Source: —</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+
+            <tr>
+                <td><span class="priority-badge low">Low</span></td>
+                <td><span class="score-pill">2</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/us-seizes-e-note-crypto-exchange-for-laundering-ransomware-payments/" target="_blank">US seizes E-Note crypto exchange</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge low">Low</span></td>
+                <td><span class="score-pill">2</span></td>
+                <td>
+                    <a href="https://thehackernews.com/2025/12/threatsday-bulletin-whatsapp-hijacks.html" target="_blank">ThreatsDay Bulletin</a><br>
+                    <small>Source: The Hacker News</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge low">Low</span></td>
+                <td><span class="score-pill">2</span></td>
+                <td>
+                    <a href="https://isc.sans.edu/diary/rss/32582" target="_blank">ISC Stormcast Dec 18th</a><br>
+                    <small>Source: —</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+            <tr>
+                <td><span class="priority-badge low">Low</span></td>
+                <td><span class="score-pill">2</span></td>
+                <td>
+                    <a href="https://www.bleepingcomputer.com/news/security/france-arrests-suspect-tied-to-cyberattack-on-interior-ministry/" target="_blank">France arrests suspect tied to Interior Ministry attack</a><br>
+                    <small>Source: BleepingComputer</small>
+                </td>
+                <td class="cmdb-list">—</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
