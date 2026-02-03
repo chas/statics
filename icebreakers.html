@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ice Breaker</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --accent-color: #6366f1;
+            --text-color: #1f2937;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        #question-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .shuffling {
+            opacity: 0.5;
+            filter: blur(1px);
+            transform: scale(0.98);
+        }
+
+        button {
+            padding: 1.5rem 4rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled {
+            background-color: #a5a6f6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            #question-display { font-size: 2rem; min-height: 200px; }
+            button { padding: 1rem 2.5rem; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="question-display">Ready to break the ice?</div>
+        <button id="go-btn" onclick="generateQuestion()">GO</button>
+    </div>
+
+    <script>
+        const questions = [
+            "What’s your most-used emoji?", "If you could have any superpower, what would it be?", "What’s the best piece of advice you’ve ever received?", "Are you a morning person or a night owl?", "What’s your favorite way to unwind after a long day?",
+            "If you could travel anywhere in the world right now, where would you go?", "What’s the most interesting thing you’ve read or watched lately?", "What’s a hobby you’ve always wanted to try?", "What’s your go-to karaoke song?", "If you could meet any historical figure, who would it be?",
+            "What’s your favorite childhood memory?", "What’s the best meal you’ve ever had?", "If you had to eat one food for the rest of your life, what would it be?", "What’s your favorite book or movie of all time?", "What’s the most adventurous thing you’ve ever done?",
+            "What’s your hidden talent?", "If you won the lottery tomorrow, what’s the first thing you’d buy?", "What’s your favorite season and why?", "Are you a cat person or a dog person?", "What’s the best gift you’ve ever received?",
+            "What’s your favorite thing about your job?", "If you could switch lives with anyone for a day, who would it be?", "What’s the most important quality in a friend?", "What’s your favorite way to stay active?", "If you could live in any era, which one would you choose?",
+            "What’s your favorite holiday?", "What’s the most meaningful project you’ve ever worked on?", "What’s your favorite type of music?", "If you could learn any language fluently, which one would it be?", "What’s your favorite quote?",
+            "What’s the best vacation you’ve ever been on?", "What’s your favorite thing to do on a weekend?", "If you could have dinner with any three people, dead or alive, who would they be?", "What’s the most spontaneous thing you’ve ever done?", "What’s your favorite app on your phone?",
+            "What’s your favorite way to give back to the community?", "If you could be any animal, which one would you be?", "What’s the best concert you’ve ever attended?", "What’s your favorite way to start the day?", "What’s the most interesting place you’ve ever visited?",
+            "If you could have any career in the world, what would it be?", "What’s your favorite tradition?", "What’s the best thing about where you live?", "If you could change one thing about the world, what would it be?", "What’s your favorite smell?",
+            "What’s the most challenging thing you’ve ever accomplished?", "What’s your favorite way to spend a rainy day?", "If you could possess any talent instantly, what would it be?", "What’s your favorite dessert?", "What’s the most surprising thing you’ve ever learned?",
+            "What’s your favorite board game or card game?", "If you could design your dream home, what’s one must-have feature?", "What’s the best movie you’ve seen in the last year?", "What’s your favorite way to celebrate your birthday?", "If you could be a character in any book or movie, who would you be?",
+            "What’s your favorite thing about yourself?", "What’s the most creative thing you’ve ever made?", "If you could have any animal as a pet, what would it be?", "What’s your favorite way to spend a summer afternoon?", "What’s the best piece of news you’ve heard recently?",
+            "If you could only use three words to describe yourself, what would they be?", "What’s your favorite thing to cook or bake?", "What’s the most beautiful place you’ve ever seen?", "If you could go back in time and give your younger self some advice, what would it be?", "What’s your favorite way to spend a winter evening?",
+            "What’s the most interesting job you’ve ever had?", "If you could be the CEO of any company, which one would it be?", "What’s your favorite thing to do with your friends?", "What’s the most valuable lesson you’ve learned in life?", "If you could have any artist paint your portrait, who would it be?",
+            "What’s your favorite podcast?", "What’s the best thing you’ve ever bought for under $20?", "If you could spend a day in any museum, which one would it be?", "What’s your favorite way to spend a solo day?", "What’s the most interesting fact you know?",
+            "If you could be a contestant on any game show, which one would it be?", "What’s your favorite way to stay organized?", "What’s the best compliment you’ve ever received?", "If you could visit any planet, which one would it be?", "What’s your favorite way to spend a fall day?",
+            "What’s the most inspiring book you’ve ever read?", "If you could have any famous chef cook for you, who would it be?", "What’s your favorite thing about your hometown?", "What’s the most unique thing about you?", "If you could be an expert in any subject, what would it be?",
+            "What’s your favorite way to spend a spring day?", "What’s the best piece of technology you own?", "If you could have any mythical creature as a pet, what would it be?", "What’s your favorite way to show someone you care?", "What’s the most interesting documentary you’ve ever watched?",
+            "If you could be a Olympic athlete in any sport, which one would it be?", "What’s your favorite thing about your best friend?", "What’s the best advice you’d give to someone starting their career?", "If you could live in any fictional world, which one would it be?", "What’s your favorite way to relax on a flight?",
+            "What’s the most interesting thing you’ve found on the internet lately?", "If you could have any instrument-playing skill, what would it be?", "What’s your favorite piece of art?", "What’s the best thing about being your age?", "If you could solve one mystery, which one would it be?"
+        ];
+
+        function generateQuestion() {
+            const display = document.getElementById('question-display');
+            const btn = document.getElementById('go-btn');
+            
+            btn.disabled = true;
+            display.classList.add('shuffling');
+
+            let counter = 0;
+            const shuffleInterval = setInterval(() => {
+                const randomIdx = Math.floor(Math.random() * questions.length);
+                display.innerText = questions[randomIdx];
+                counter++;
+                
+                if (counter > 15) {
+                    clearInterval(shuffleInterval);
+                    const finalIdx = Math.floor(Math.random() * questions.length);
+                    display.innerText = questions[finalIdx];
+                    display.classList.remove('shuffling');
+                    btn.disabled = false;
+                }
+            }, 80);
+        }
+    </script>
+</body>
+</html>
