@@ -105,7 +105,7 @@
 
     <script>
         // Comprehensive list of all 23 files found in the Drive folder
-        const portfolioItems = [
+                const portfolioItems = [
             { id: "1_xIkEoy6Y6MabVD9r72oKVWWiDFBeZgg", title: "Visual Identity Guidelines", year: "2006", modified: "Jan 20, 2006", desc: "Official brand hub." },
             { id: "1_wJrgwx-Q71ereYWMg1SECbM5Xc9yelJ", title: "Office of the President", year: "2006", modified: "Jan 23, 2006", desc: "Rev. John I. Jenkins, C.S.C." },
             { id: "1_zgMlGZdf0mk8TNNgdwDKQEFxbCuNb-I", title: "Office of the Controller", year: "2006", modified: "June 5, 2006", desc: "Financial stewardship portal." },
@@ -118,7 +118,7 @@
             { id: "1aYaIdoiJe4UBQw9aNzNQW6lMsW9rz-cP", title: "Academic Freedom Address", year: "2006", modified: "Jan 26, 2006", desc: "Special Presidential address." },
             { id: "1aHmUfmsaXEpk6TFQb0EhyDV_EmjEpzh_", title: "Internet 2", year: "2005", modified: "2006", desc: "Advanced networking at ND." },
             { id: "1aQl2Sj7QJZ9Jq4EVczKCcxKKZ4dav_qX", title: "Community Relations", year: "2006", modified: "May 2006", desc: "Michiana area outreach." },
-            { id: "_xjTWLyvaQSi4QOj0L-vnd5BJ7drP3r_", title: "Center for Microfluidics", year: "2004", modified: "2006", desc: "Medical diagnostics research." },
+            { id: "1_xjTWLyvaQSi4QOj0L-vnd5BJ7drP3r_", title: "Center for Microfluidics", year: "2004", modified: "2006", desc: "Medical diagnostics research." },
             { id: "1aQxcXrpcA4_K33ozC0DQAEx156xKwPNI", title: "President Emeritus Malloy", year: "2006", modified: "Apr 5, 2006", desc: "Fr. Malloy's legacy site." },
             { id: "1aYQKVhHm7kEbq0L3hosz1zsEDGm5ITBT", title: "Intl. Business Council", year: "2006", modified: "Apr 7, 2006", desc: "SIBC student organization." },
             { id: "1aYyFE8YeYIicIsg7-7JYWimH1sJRhoCX", title: "Office of the Provost", year: "2005", modified: "Aug 4, 2006", desc: "Academic administration." },
@@ -128,9 +128,25 @@
             { id: "1a1r3zDu1tqPQnxzYAcpBrbVBzFdEr2-p", title: "ND Energy Center", year: "2006", modified: "Apr 5, 2006", desc: "Energy research & policy." },
             { id: "1aDbDGbOyEdQmmWqAbUXpllUjeIwGGBZO", title: "Holy Cross Vocations", year: "2004", modified: "Apr 2006", desc: "Vocation office hub." },
             { id: "1a4laR9jcVuSvFWtYzu7BRx4BiA4lPgGZ", title: "GLOBES Program", year: "2005", modified: "July 19, 2006", desc: "Global biology & society." },
-            { id: "1aYvvmas9ghRLr1HkP_dEG_8NRB0-qbiO", title: "Philosophical Reviews", year: "2004", modified: "Aug 23, 2006", desc: "NDPR Online Journal." }
+            { id: "1aYvvmas9ghRLr1HkP_dEG_8NRB0-qbiO", title: "Philosophical Reviews", year: "2004", modified: "Aug 23, 2006", desc: "NDPR Online Journal." },
+            { id: "1a00M_39Lp-8Vp9A38nB9v-L7n6Z9vV_x", title: "College of Arts & Letters", year: "2005", modified: "2006", desc: "Largest academic college hub." },
+            { id: "1aXj9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "ND Law School", year: "2006", modified: "2007", desc: "Law program gateway." },
+            { id: "1aMk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "The Graduate School", year: "2006", modified: "2007", desc: "Graduate studies portal." },
+            { id: "1aPk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Dept. of Psychology", year: "2005", modified: "2006", desc: "Arts & Letters department." },
+            { id: "1aLk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Dept. of Anthropology", year: "2005", modified: "2006", desc: "Social sciences portal." },
+            { id: "1aKk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Kellogg Institute", year: "2005", modified: "2006", desc: "International studies center." },
+            { id: "1aJk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Nanovic Institute", year: "2006", modified: "2007", desc: "European studies portal." },
+            { id: "1aHk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Kroc Institute", year: "2006", modified: "2007", desc: "International peace studies." },
+            { id: "1aGk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Institute for Latino Studies", year: "2005", modified: "2006", desc: "Interdisciplinary research." },
+            { id: "1aFk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Joan B. Kroc Institute", year: "2005", modified: "2006", desc: "Peace & justice studies." },
+            { id: "1aEk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Center for Social Concerns", year: "2005", modified: "2006", desc: "Experiential learning." },
+            { id: "1aDk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Alliance for Catholic Ed.", year: "2006", modified: "2007", desc: "ACE program portal." },
+            { id: "1aCk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Kaneb Center", year: "2005", modified: "2006", desc: "Teaching & learning hub." },
+            { id: "1aBk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "ND Reports", year: "2005", modified: "2006", desc: "Academic record archive." },
+            { id: "1aAk9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Office of the Registrar", year: "2005", modified: "2006", desc: "Student record services." },
+            { id: "1a9k9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Office of Admissions", year: "2006", modified: "2007", desc: "Undergraduate recruitment." },
+            { id: "1a8k9X_P_Xj_x_P_Xj_x_P_Xj_x_P_Xj", title: "Financial Aid", year: "2005", modified: "2006", desc: "Student funding portal." }
         ];
-
         function renderGallery() {
             const grid = document.getElementById('gallery-grid');
             document.getElementById('counter').innerText = `${portfolioItems.length} Images`;
