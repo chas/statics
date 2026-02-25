@@ -77,7 +77,7 @@
                 <div class="flex-1">
                     <h2 class="text-3xl font-bold mb-6 text-[#0c2340]">Archival Portfolio</h2>
                     <p class="leading-relaxed text-lg text-slate-600 mb-6">
-                        This gallery preserves the digital heritage of the University of Notre Dame. If images fail to load, please ensure the Google Drive folder is set to "Public" or "Anyone with the link can view".
+                        This gallery preserves the digital heritage of the University of Notre Dame's web presence during its formative years.
                     </p>
                     <div class="flex items-center gap-4 text-sm font-semibold text-[#c99700]">
                         <span id="counter" class="bg-[#0c2340] text-white px-3 py-1 rounded-full">0 Images</span>
@@ -109,9 +109,6 @@
             <div class="text-center mt-6">
                 <h3 id="modal-title" class="text-white text-2xl font-bold"></h3>
                 <p id="modal-desc" class="text-slate-400 mt-2 max-w-2xl"></p>
-                <a id="modal-drive-link" href="#" target="_blank" class="inline-block mt-4 px-6 py-2 bg-[#c99700] text-[#0c2340] font-bold rounded hover:bg-yellow-500 transition-colors">
-                    View Original on Google Drive
-                </a>
             </div>
         </div>
     </div>
@@ -126,66 +123,63 @@
 
     <script>
         const portfolioItems = [
-          { "id": "1v-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Official University Visual Identity Guidelines", "year": "2006", "modified": "Jan 20, 2006", "desc": "Official brand hub for Notre Dame's visual identity." },
-          { "id": "1H307L68_7212m7_9N168V-923W3840-0", "title": "Internet 2- Enabling Great Learning Experiences", "year": "2005", "modified": "Aug 23, 2006", "desc": "Information on high-speed global network collaboration." },
-          { "id": "127_85353112_9N168V-923W3840-0", "title": "WebCT Vista @ Notre Dame", "year": "2005", "modified": "Aug 23, 2006", "desc": "Course management system login and support page." },
-          { "id": "1y_40320-7212m7_9N168V-923W3840-0", "title": "Academic Freedom and Catholic Character", "year": "2006", "modified": "Jan 26, 2006", "desc": "Address to faculty by Rev. John I. Jenkins, C.S.C." },
-          { "id": "1P-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Program of Liberal Studies", "year": "2006", "modified": "Jan 29, 2007", "desc": "Integrated liberal education rooted in the Great Books." },
-          { "id": "1M-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Center for Microfluidics and Medical Diagnostics", "year": "2004", "modified": "Aug 23, 2006", "desc": "Research on miniaturized laboratory technologies." },
-          { "id": "1n-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Notre Dame Homepage", "year": "2007", "modified": "Jan 29, 2007", "desc": "Official university landing page." },
-          { "id": "1G-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "GLOBES Program", "year": "2005", "modified": "July 19, 2006", "desc": "Interdisciplinary program in global linkages of biology and society." },
-          { "id": "1L-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Lumen Magazine", "year": "2006", "modified": "Aug 22, 2006", "desc": "Research, scholarship, and creativity at Notre Dame." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of Community Relations", "year": "2006", "modified": "Aug 23, 2006", "desc": "Link between the university and the Michiana community." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Classics", "year": "2006", "modified": "May 9, 2006", "desc": "Study of Greek, Latin, and Classical Civilization." },
-          { "id": "1C-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of the Controller", "year": "2005", "modified": "June 5, 2006", "desc": "Financial services and stewardship for the University." },
-          { "id": "1A-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Notre Dame Philosophical Reviews", "year": "2004", "modified": "Aug 23, 2006", "desc": "Substantive, high-quality book reviews in philosophy." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of Human Resources", "year": "2005", "modified": "2006", "desc": "Employee services, benefits, and professional development." },
-          { "id": "1I-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Institute for Scholarship in the Liberal Arts", "year": "2006", "modified": "May 5, 2006", "desc": "Supporting faculty research in arts, humanities, and social sciences." },
-          { "id": "1N-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "ND Energy Center", "year": "2006", "modified": "Apr 5, 2006", "desc": "Energy research focusing on efficiency and environment." },
-          { "id": "1C-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Cancer Institute", "year": "2005", "modified": "Aug 23, 2006", "desc": "Genetics-based cancer research and clinical trials." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of History", "year": "2006", "modified": "Sept 13, 2006", "desc": "Leading center for historical study and methods." },
-          { "id": "1U-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Richard H. Driehaus Prize", "year": "2004", "modified": "Aug 23, 2006", "desc": "Award for classical architecture and ideals." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of the Provost", "year": "2005", "modified": "Aug 4, 2006", "desc": "Academic administration and coordination." },
-          { "id": "1F-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Faith and Health Conference", "year": "2006", "modified": "June 7, 2006", "desc": "Interdisciplinary discussion on religious coping." },
-          { "id": "1E-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Environmental Research Center - East", "year": "2004", "modified": "Aug 23, 2006", "desc": "Research and education in unique environmental habitats." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Division of Student Affairs", "year": "2006", "modified": "Mar 31, 2006", "desc": "Supporting spiritual, moral, and social growth in student life." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Psychology", "year": "2006", "modified": "Jan 29, 2007", "desc": "Doctoral and undergraduate studies in psychology." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Chemistry and Biochemistry", "year": "2005", "modified": "Aug 23, 2006", "desc": "Research highlights and graduate programs in science." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of the President", "year": "2006", "modified": "Jan 23, 2006", "desc": "Official portal for Rev. John I. Jenkins, C.S.C." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Sociology", "year": "2007", "modified": "Feb 23, 2007", "desc": "Intellectual community for individual and national social activity." },
-          { "id": "1H-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Holy Cross Vocation Office", "year": "2004", "modified": "Aug 23, 2006", "desc": "Information on priesthood and religious life in Holy Cross." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Africana Studies", "year": "2006", "modified": "Feb 17, 2006", "desc": "Study of the African American experience and the Diaspora." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Philosophy", "year": "2006", "modified": "July 18, 2006", "desc": "Mission-driven study of ethics and critical thinking." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of English", "year": "2006", "modified": "Aug 12, 2006", "desc": "Graduate and undergraduate studies in literature and writing." },
-          { "id": "1D-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Department of Political Science", "year": "2006", "modified": "June 20, 2006", "desc": "Research in American politics, international relations, and theory." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Opera Notre Dame", "year": "2006", "modified": "Apr 6, 2006", "desc": "Theatrical productions from the Department of Music." },
-          { "id": "1S-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Summer Shakespeare", "year": "2006", "modified": "Mar 1, 2006", "desc": "Professional theatre in residence at Notre Dame." },
-          { "id": "1O-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Office of the President Emeritus Father Malloy", "year": "2006", "modified": "Apr 5, 2006", "desc": "Accomplishments and growth under Father Malloy's leadership." },
-          { "id": "1P-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Program in American Democracy", "year": "2005", "modified": "Aug 1, 2006", "desc": "Understanding democratic politics and policy in the U.S." },
-          { "id": "1S-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Student International Business Council", "year": "2006", "modified": "Apr 7, 2006", "desc": "Student-led organization focused on international business development." },
-          { "id": "1N-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "Notre Dame Center for Ethics and Culture", "year": "2004", "modified": "July 28, 2006", "desc": "Scholarly reflection within the Catholic tradition." },
-          { "id": "1S-1-E5_e27u5L9n0UaX47G9Y-y_73f_2", "title": "School of Architecture", "year": "2004", "modified": "Aug 23, 2006", "desc": "Premier place for traditional and classical architecture." }
+          { "file": "Official University Visual Identity Guidelines - University of Notre Dame (20060823).png", "title": "Official University Visual Identity Guidelines", "year": "2006", "modified": "Jan 20, 2006", "desc": "Official brand hub for Notre Dame's visual identity." },
+          { "file": "Internet 2- Enabling Great Learning Experiences at Notre Dame (20060823).png", "title": "Internet 2- Enabling Great Learning Experiences", "year": "2005", "modified": "Aug 23, 2006", "desc": "Information on high-speed global network collaboration." },
+          { "file": "WebCT Vista @ Notre Dame (20060823).png", "title": "WebCT Vista @ Notre Dame", "year": "2005", "modified": "Aug 23, 2006", "desc": "Course management system login and support page." },
+          { "file": "Academic Freedom and Catholic Character -- Office of the President -- University of Notre Dame (20060823).png", "title": "Academic Freedom and Catholic Character", "year": "2006", "modified": "Jan 26, 2006", "desc": "Address to faculty by Rev. John I. Jenkins, C.S.C." },
+          { "file": "Program of Liberal Studies -- University of Notre Dame (20070129).jpg", "title": "Program of Liberal Studies", "year": "2006", "modified": "Jan 29, 2007", "desc": "Integrated liberal education rooted in the Great Books." },
+          { "file": "Microfluidics - University of Notre Dame (20060823).png", "title": "Center for Microfluidics and Medical Diagnostics", "year": "2004", "modified": "Aug 23, 2006", "desc": "Research on miniaturized laboratory technologies." },
+          { "file": "nd_edu_homepage.jpg", "title": "Notre Dame Homepage", "year": "2007", "modified": "Jan 29, 2007", "desc": "Official university landing page." },
+          { "file": "Globes -- University of Notre Dame (20060823).png", "title": "GLOBES Program", "year": "2005", "modified": "July 19, 2006", "desc": "Interdisciplinary program in global linkages of biology and society." },
+          { "file": "Lumen Magazine (20060823).png", "title": "Lumen Magazine", "year": "2006", "modified": "Aug 22, 2006", "desc": "Research, scholarship, and creativity at Notre Dame." },
+          { "file": "Office of Community Relations - University of Notre Dame (20060823).png", "title": "Office of Community Relations", "year": "2006", "modified": "Aug 23, 2006", "desc": "Link between the university and the Michiana community." },
+          { "file": "Department of Classics -- University of Notre Dame (20060823).png", "title": "Department of Classics", "year": "2006", "modified": "May 9, 2006", "desc": "Study of Greek, Latin, and Classical Civilization." },
+          { "file": "Controller_s Group -- University of Notre Dame (20060823).png", "title": "Office of the Controller", "year": "2005", "modified": "June 5, 2006", "desc": "Financial services and stewardship for the University." },
+          { "file": "About Philosophical Reviews - University of Notre Dame (20060823).png", "title": "Notre Dame Philosophical Reviews", "year": "2004", "modified": "Aug 23, 2006", "desc": "Substantive, high-quality book reviews in philosophy." },
+          { "file": "Office of Human Resources- University of Notre Dame (20060823).png", "title": "Office of Human Resources", "year": "2005", "modified": "2006", "desc": "Employee services, benefits, and professional development." },
+          { "file": "Institute for Scholarship in the Liberal Arts -- University of Notre Dame (20060823).png", "title": "Institute for Scholarship in the Liberal Arts", "year": "2006", "modified": "May 5, 2006", "desc": "Supporting faculty research in arts, humanities, and social sciences." },
+          { "file": "ND Energy Center -- University of Notre Dame (20060823).png", "title": "ND Energy Center", "year": "2006", "modified": "Apr 5, 2006", "desc": "Energy research focusing on efficiency and environment." },
+          { "file": "Cancer Institute -- University of Notre Dame (20060823).png", "title": "Cancer Institute", "year": "2005", "modified": "Aug 23, 2006", "desc": "Genetics-based cancer research and clinical trials." },
+          { "file": "Department of History -- University of Notre Dame (20070129).jpg", "title": "Department of History", "year": "2006", "modified": "Sept 13, 2006", "desc": "Leading center for historical study and methods." },
+          { "file": "Office of the Provost -- University of Notre Dame (20060823).png", "title": "Office of the Provost", "year": "2005", "modified": "Aug 4, 2006", "desc": "Academic administration and coordination." },
+          { "file": "Faith and Health -- Conference -- University of Notre Dame (20060823).png", "title": "Faith and Health Conference", "year": "2006", "modified": "June 7, 2006", "desc": "Interdisciplinary discussion on religious coping." },
+          { "file": "Environmental Research Center - East - University of Notre Dame (20060823).png", "title": "Environmental Research Center - East", "year": "2004", "modified": "Aug 23, 2006", "desc": "Research and education in unique environmental habitats." },
+          { "file": "Division of Student Affairs -- University of Notre Dame (20060823).png", "title": "Division of Student Affairs", "year": "2006", "modified": "Mar 31, 2006", "desc": "Supporting spiritual, moral, and social growth in student life." },
+          { "file": "Department of Psychology -- University of Notre Dame (20070129).jpg", "title": "Department of Psychology", "year": "2006", "modified": "Jan 29, 2007", "desc": "Doctoral and undergraduate studies in psychology." },
+          { "file": "Department of Chemistry and Biochemistry -- University of Notre Dame (20060823).png", "title": "Department of Chemistry and Biochemistry", "year": "2005", "modified": "Aug 23, 2006", "desc": "Research highlights and graduate programs in science." },
+          { "file": "Office of the President -- University of Notre Dame (20060823).png", "title": "Office of the President", "year": "2006", "modified": "Jan 23, 2006", "desc": "Official portal for Rev. John I. Jenkins, C.S.C." },
+          { "file": "Department of Sociology -- University of Notre Dame (20070129).jpg", "title": "Department of Sociology", "year": "2007", "modified": "Feb 23, 2007", "desc": "Intellectual community for individual and national social activity." },
+          { "file": "Holy Cross Vocation Office - University of Notre Dame (20060823).png", "title": "Holy Cross Vocation Office", "year": "2004", "modified": "Aug 23, 2006", "desc": "Information on priesthood and religious life in Holy Cross." },
+          { "file": "Department of Africana Studies -- University of Notre Dame (20060823).png", "title": "Department of Africana Studies", "year": "2006", "modified": "Feb 17, 2006", "desc": "Study of the African American experience and the Diaspora." },
+          { "file": "Department of Philosophy -- University of Notre Dame (20060823).png", "title": "Department of Philosophy", "year": "2006", "modified": "July 18, 2006", "desc": "Mission-driven study of ethics and critical thinking." },
+          { "file": "Department of English -- University of Notre Dame (20060823).png", "title": "Department of English", "year": "2006", "modified": "Aug 12, 2006", "desc": "Graduate and undergraduate studies in literature and writing." },
+          { "file": "Department of Political Science -- University of Notre Dame (20060823).png", "title": "Department of Political Science", "year": "2006", "modified": "June 20, 2006", "desc": "Research in American politics, international relations, and theory." },
+          { "file": "Opera -- University of Notre Dame (20060823).png", "title": "Opera Notre Dame", "year": "2006", "modified": "Apr 6, 2006", "desc": "Theatrical productions from the Department of Music." },
+          { "file": "Summer Shakespeare -- University of Notre Dame (20060823).png", "title": "Summer Shakespeare", "year": "2006", "modified": "Mar 1, 2006", "desc": "Professional theatre in residence at Notre Dame." },
+          { "file": "Office of the President Emeritus Father Malloy -- University of Notre Dame (20060823).png", "title": "Office of the President Emeritus Father Malloy", "year": "2006", "modified": "Apr 5, 2006", "desc": "Accomplishments and growth under Father Malloy's leadership." },
+          { "file": "Program in American Democracy -- University of Notre Dame (20060823).png", "title": "Program in American Democracy", "year": "2005", "modified": "Aug 1, 2006", "desc": "Understanding democratic politics and policy in the U.S." },
+          { "file": "Student International Business Council -- University of Notre Dame (20060823).png", "title": "Student International Business Council", "year": "2006", "modified": "Apr 7, 2006", "desc": "Student-led organization focused on international business development." },
+          { "file": "Notre Dame Center for Ethics and Culture (20060823).png", "title": "Notre Dame Center for Ethics and Culture", "year": "2004", "modified": "July 28, 2006", "desc": "Scholarly reflection within the Catholic tradition." },
+          { "file": "School of Architecture - University of Notre Dame (20060823).png", "title": "School of Architecture", "year": "2004", "modified": "Aug 23, 2006", "desc": "Premier place for traditional and classical architecture." }
         ];
 
-        // Improved URL construction for Google Drive images
-        function getImageUrl(id, size = 1000) {
-            // Using the 'uc' (user content) endpoint which is often more stable than 'lh3' for different ID formats
-            return `https://drive.google.com/uc?export=view&id=${id}`;
+        function getImagePath(file) {
+            return 'assets/ndwg-screenshots/' + encodeURIComponent(file);
         }
 
         function renderGallery() {
             const grid = document.getElementById('gallery-grid');
             document.getElementById('counter').innerText = `${portfolioItems.length} Images`;
-            
-            grid.innerHTML = portfolioItems.map(item => `
-                <div class="gallery-card bg-white rounded-lg overflow-hidden border border-slate-200 cursor-pointer" 
-                     onclick="openModal('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.desc.replace(/'/g, "\\'")}')">
+
+            grid.innerHTML = portfolioItems.map((item, index) => `
+                <div class="gallery-card bg-white rounded-lg overflow-hidden border border-slate-200 cursor-pointer"
+                     onclick="openModal(${index})">
                     <div class="h-56 overflow-hidden bg-slate-100 relative group">
-                        <img src="${getImageUrl(item.id)}" 
-                             alt="${item.title}" 
+                        <img src="${getImagePath(item.file)}"
+                             alt="${item.title}"
                              class="w-full h-full object-cover object-top"
                              loading="lazy"
-                             onerror="this.src='https://placehold.co/600x400?text=Snapshot+Private+or+Missing'">
+                             onerror="this.src='https://placehold.co/600x400?text=Image+Not+Found'">
                         <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span class="text-white text-xs font-bold uppercase tracking-widest border border-white px-4 py-2">View Full Size</span>
                         </div>
@@ -202,23 +196,26 @@
             `).join('');
         }
 
-        function openModal(id, title, desc) {
+        let currentIndex = -1;
+
+        function openModal(index) {
+            currentIndex = index;
+            const item = portfolioItems[index];
             const modal = document.getElementById('lightbox');
             const modalImg = document.getElementById('modal-img');
             const modalTitle = document.getElementById('modal-title');
             const modalDesc = document.getElementById('modal-desc');
-            const driveLink = document.getElementById('modal-drive-link');
-            
-            modalImg.src = getImageUrl(id);
-            modalTitle.innerText = title;
-            modalDesc.innerText = desc;
-            driveLink.href = `https://drive.google.com/file/d/${id}/view?usp=sharing`;
-            
+
+            modalImg.src = getImagePath(item.file);
+            modalTitle.innerText = item.title;
+            modalDesc.innerText = item.desc;
+
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
+            currentIndex = -1;
             document.getElementById('lightbox').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
@@ -227,6 +224,12 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
+            if (currentIndex === -1) return;
+            if (e.key === 'ArrowRight') {
+                openModal((currentIndex + 1) % portfolioItems.length);
+            } else if (e.key === 'ArrowLeft') {
+                openModal((currentIndex - 1 + portfolioItems.length) % portfolioItems.length);
+            }
         });
     </script>
 </body>
