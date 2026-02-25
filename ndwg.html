@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDWG Design Portfolio (2005-2011)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nd-blue: #0c2340;
+            --nd-gold: #c99700;
+        }
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            font-family: 'Libre+Baskerville', serif;
+        }
+        .gallery-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-[#0c2340] text-white py-12 px-6 border-b-4 border-[#c99700]">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Notre Dame Web Group</h1>
+            <p class="text-xl text-slate-300 italic font-light">Digital Identity & Design Portfolio • 2005 — 2011</p>
+        </div>
+    </header>
+
+    <!-- Intro Section -->
+    <section class="max-w-6xl mx-auto py-12 px-6">
+        <div class="bg-white p-8 rounded-lg shadow-sm border-l-4 border-[#c99700]">
+            <h2 class="text-2xl font-bold mb-4 text-[#0c2340]">The Early Web at Notre Dame</h2>
+            <p class="leading-relaxed mb-4">
+                Between 2005 and 2011, the Notre Dame Web Group (NDWG) was instrumental in shaping the University's online presence. During this era, web design transitioned from table-based layouts to CSS-driven standards. The following gallery showcases original screenshots of departmental and official University sites designed by the group during this formative period.
+            </p>
+            <p class="text-sm text-slate-500">
+                Images retrieved from the University archives. Hover over thumbnails to see details; click to enlarge.
+            </p>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <main class="max-w-6xl mx-auto pb-24 px-6">
+        <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Items will be injected by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="modal" onclick="closeModal()">
+        <span class="absolute top-5 right-10 text-white text-4xl cursor-pointer hover:text-gray-300">&times;</span>
+        <img id="modal-img" class="modal-content rounded border-4 border-white" src="" alt="Full size preview">
+    </div>
+
+    <footer class="bg-slate-200 py-8 text-center text-slate-600 text-sm border-t border-slate-300">
+        <p>© University of Notre Dame • NDWG Historical Archive</p>
+    </footer>
+
+    <script>
+        const portfolioItems = [
+            {
+                title: "Official Visual Identity Guidelines",
+                year: "2006",
+                modified: "January 20, 2006",
+                id: "1_xIkEoy6Y6MabVD9r72oKVWWiDFBeZgg",
+                description: "The primary hub for the University's unified brand standards."
+            },
+            {
+                title: "Office of the President",
+                year: "2006",
+                modified: "January 23, 2006",
+                id: "_wJrgwx-Q71ereYWMg1SECbM5Xc9yelJ",
+                description: "Official site for Rev. John I. Jenkins, C.S.C."
+            },
+            {
+                title: "Lumen Magazine",
+                year: "2006",
+                modified: "August 22, 2006",
+                id: "1aV5018hU2DAFdnZX3CYgB9zdDhAX4RNv",
+                description: "Research, scholarship, and creativity at Notre Dame."
+            },
+            {
+                title: "School of Architecture",
+                year: "2004",
+                modified: "August 2006",
+                id: "1aAow2EZPfwGk07BoIURaVqWssMUA7Kte",
+                description: "Showcasing traditional and classical architecture programs."
+            },
+            {
+                title: "Dept. of Chemistry & Biochemistry",
+                year: "2005",
+                modified: "August 2006",
+                id: "1aQR5Aj8t52V9UuyFiSF-1RYARmBMjiy_",
+                description: "Modernized faculty research and graduate program portal."
+            },
+            {
+                title: "Center for Ethics & Culture",
+                year: "2004",
+                modified: "July 28, 2006",
+                id: "1a0uNkcFP0Hr1m36rGLS-lLXVL2q-hjWA",
+                description: "Scholarly reflection within the Catholic tradition."
+            },
+            {
+                title: "Office of Human Resources",
+                year: "2005",
+                modified: "July 5, 2006",
+                id: "1a87uXammOlenA-Twit43L3_mQ-55wnIb",
+                description: "Complex service portal for faculty and staff."
+            },
+            {
+                title: "Controller's Group",
+                year: "2005",
+                modified: "June 5, 2006",
+                id: "_zgMlGZdf0mk8TNNgdwDKQEFxbCuNb-I",
+                description: "Financial stewardship and University annual reports."
+            },
+            {
+                title: "Program in American Democracy",
+                year: "2005",
+                modified: "August 1, 2006",
+                id: "1aXYjXuilukQ4L-rCnLKcq6-MFl7WsUdp",
+                description: "Interdisciplinary research site for political science."
+            }
+        ];
+
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = portfolioItems.map(item => `
+                <div class="gallery-card bg-white rounded-lg overflow-hidden shadow-md cursor-pointer" onclick="openModal('${item.id}')">
+                    <div class="h-64 overflow-hidden bg-slate-200 flex items-center justify-center relative group">
+                        <img src="https://lh3.googleusercontent.com/u/0/d/${item.id}=w800-h800-p" 
+                             alt="${item.title}" 
+                             class="w-full h-full object-cover object-top"
+                             onerror="this.src='https://placehold.co/600x400?text=Snapshot+Unavailable'">
+                        <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="text-white border-2 border-white px-4 py-2 rounded-full font-bold">View Screenshot</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg text-[#0c2340] leading-tight">${item.title}</h3>
+                            <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded font-bold">${item.year}</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4">${item.description}</p>
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold border-t pt-3">
+                            Modified: ${item.modified}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById('lightbox');
+            const modalImg = document.getElementById('modal-img');
+            modalImg.src = `https://lh3.googleusercontent.com/u/0/d/${id}=w1600`;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('lightbox');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Initialize gallery
+        window.onload = renderGallery;
+
+        // Close on Esc key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
