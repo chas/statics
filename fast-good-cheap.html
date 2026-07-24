@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fast / Cheap / Good — Frontier LLM Selector</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --ink: #1b1a18;
+    --ink-2: #5c5850;
+    --ink-3: #8d887e;
+    --line: #e3e0d9;
+    --line-2: #f2f0eb;
+    --good: #2f6f4f;
+    --fast: #1f5f9e;
+    --cheap: #96591a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 4px 20px 36px; }
+  h1 { font-size: 21px; margin: 12px 0 3px; letter-spacing: -0.2px; }
+  .sub { color: var(--ink-2); font-size: 13.5px; margin: 0 0 20px; max-width: 74ch; }
+
+  .cols { display: flex; gap: 28px; align-items: flex-start; }
+  .left { flex: 0 0 420px; max-width: 420px; }
+  .right { flex: 1 1 auto; min-width: 0; }
+
+  /* ---------- triangle ---------- */
+  #stage { position: relative; width: 100%; touch-action: none; cursor: crosshair; user-select: none; }
+  #tri { width: 100%; display: block; overflow: visible; }
+  #handle {
+    position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--ink); box-shadow: 0 1px 6px rgba(0,0,0,.3); pointer-events: none;
+    transition: border-color .15s;
+  }
+  .corner {
+    position: absolute; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; pointer-events: none; white-space: nowrap;
+  }
+  .corner small { display: block; font-size: 9.5px; font-weight: 500; letter-spacing: .04em;
+                  text-transform: none; color: var(--ink-3); }
+
+  .mix { display: flex; gap: 6px; margin: 16px 0 0; }
+  .mixcell { flex: 1; border: 1px solid var(--line); border-radius: 4px; padding: 7px 9px; }
+  .mixcell b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .mixcell span { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; }
+  .presets button {
+    font: inherit; font-size: 12.5px; padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink-2); cursor: pointer;
+  }
+  .presets button:hover { border-color: var(--ink-3); color: var(--ink); }
+  .presets button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .hint { font-size: 11.5px; color: var(--ink-3); margin: 12px 0 0; }
+
+  /* ---------- provider filter ---------- */
+  .filterhead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 24px 0 8px; }
+  h3 { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 0; font-weight: 700; }
+  .count { font-size: 11.5px; color: var(--ink-3); }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip {
+    font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 8px; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; color: var(--ink-2); cursor: pointer;
+  }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px; }
+  .chip:hover { border-color: var(--ink-3); }
+  .chip[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: #faf8f4; font-weight: 600; }
+
+  /* ---------- best match ---------- */
+  .card { border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; border-left: 4px solid var(--ink); }
+  .kicker { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .card h2 { margin: 4px 0 1px; font-size: 25px; letter-spacing: -0.4px; line-height: 1.14; }
+  .maker { color: var(--ink-2); font-size: 12.5px; }
+  .why { font-size: 13.5px; color: var(--ink-2); margin: 11px 0 0; }
+  .bars { margin: 14px 0 0; }
+  .bar { display: grid; grid-template-columns: 44px 1fr 34px; align-items: center; gap: 9px; margin: 5px 0; }
+  .bar i { font-style: normal; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+  .track { height: 7px; background: var(--line-2); border-radius: 999px; overflow: hidden; }
+  .fill { height: 100%; border-radius: 999px; transition: width .18s; }
+  .bar em { font-style: normal; font-size: 11.5px; color: var(--ink-2); text-align: right; font-variant-numeric: tabular-nums; }
+  .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line);
+           border: 1px solid var(--line); border-radius: 5px; overflow: hidden; margin: 15px 0 0; }
+  .specs div { background: #fff; padding: 8px 10px; }
+  .specs dt { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 2px; }
+  .specs dd { margin: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  th, td { text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--line-2); }
+  th { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  th:first-child, td:first-child { text-align: left; }
+  .nm { display: flex; align-items: center; gap: 7px; }
+  .swatch { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 9px; }
+  tbody tr.top td { font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .scorecell { position: relative; }
+  .scorebg { position: absolute; left: 0; top: 3px; bottom: 3px; background: #f0ece3; border-radius: 2px; z-index: 0; }
+  .scorecell span { position: relative; z-index: 1; }
+
+  /* ---------- charts ---------- */
+  .charts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+  .chartbox { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px 12px; min-width: 0; }
+  .chartbox h4 { margin: 0 0 1px; font-size: 12.5px; font-weight: 600; }
+  .chartbox p { margin: 0 0 6px; font-size: 11px; color: var(--ink-3); line-height: 1.35; }
+  .cwrap { position: relative; height: 210px; }
+
+  footer { margin: 30px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+  footer p { margin: 0 0 7px; }
+  footer a { color: var(--ink-2); }
+
+  @media (max-width: 900px) {
+    .cols { flex-direction: column; }
+    .left { flex: 1 1 auto; max-width: 480px; width: 100%; }
+    .charts { grid-template-columns: 1fr; }
+    .cwrap { height: 240px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Fast · Cheap · Good</h1>
+  <p class="sub">Put the dot anywhere in the triangle to say how much you care about each property. The closest model to that position wins. 23 current flagship and tier models from the ten frontier labs, benchmarked by Artificial Analysis.</p>
+
+  <div class="cols">
+    <div class="left">
+      <div id="stage">
+        <svg id="tri" viewBox="0 0 400 356" aria-label="Fast cheap good triangle">
+          <polygon points="200,26 26,330 374,330" fill="#fcfbf9" stroke="#d6d2c9" stroke-width="1.25"/>
+        </svg>
+        <div id="handle"></div>
+        <div class="corner" id="cGood" style="color:var(--good)">Good<small>intelligence</small></div>
+        <div class="corner" id="cFast" style="color:var(--fast)">Fast<small>tokens / sec</small></div>
+        <div class="corner" id="cCheap" style="color:var(--cheap)">Cheap<small>$ / 1M tokens</small></div>
+      </div>
+
+      <div class="mix">
+        <div class="mixcell"><b id="wFast">33%</b><span>Fast</span></div>
+        <div class="mixcell"><b id="wCheap">33%</b><span>Cheap</span></div>
+        <div class="mixcell"><b id="wGood">33%</b><span>Good</span></div>
+      </div>
+
+      <div class="presets" id="presets"></div>
+
+      <div class="filterhead">
+        <h3>Provider</h3><span class="count" id="count"></span>
+      </div>
+      <div class="chips" id="chips"></div>
+      <p class="hint">Fast and cheap are normalised on a log scale (both span an order of magnitude); intelligence is normalised linearly across the set.</p>
+    </div>
+
+    <div class="right">
+      <div class="card" id="card">
+        <div class="kicker">Closest match</div>
+        <h2 id="wName">—</h2>
+        <div class="maker" id="wMaker">—</div>
+        <p class="why" id="wWhy"></p>
+        <div class="bars">
+          <div class="bar"><i>Fast</i><div class="track"><div class="fill" id="bFast" style="background:var(--fast)"></div></div><em id="vFast"></em></div>
+          <div class="bar"><i>Cheap</i><div class="track"><div class="fill" id="bCheap" style="background:var(--cheap)"></div></div><em id="vCheap"></em></div>
+          <div class="bar"><i>Good</i><div class="track"><div class="fill" id="bGood" style="background:var(--good)"></div></div><em id="vGood"></em></div>
+        </div>
+        <dl class="specs">
+          <div><dt>Intelligence</dt><dd id="sIntel">—</dd></div>
+          <div><dt>Output speed</dt><dd id="sSpeed">—</dd></div>
+          <div><dt>Blended price</dt><dd id="sBlend">—</dd></div>
+          <div><dt>Input / 1M</dt><dd id="sIn">—</dd></div>
+          <div><dt>Output / 1M</dt><dd id="sOut">—</dd></div>
+          <div><dt>Context</dt><dd id="sCtx">—</dd></div>
+        </dl>
+      </div>
+
+      <div class="filterhead" style="margin-top:22px"><h3>Runners-up</h3></div>
+      <table>
+        <thead><tr><th>Model</th><th>Fit</th><th>Index</th><th>t/s</th><th>$/1M</th></tr></thead>
+        <tbody id="rank"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="filterhead" style="margin-top:34px"><h3>The data behind it</h3><span class="count">bubble size = output speed · highlighted point = current match</span></div>
+  <div class="charts">
+    <div class="chartbox">
+      <h4>Intelligence vs price</h4>
+      <p>The core tradeoff. Up and to the left is better.</p>
+      <div class="cwrap"><canvas id="c1"></canvas></div>
+    </div>
+    <div class="chartbox">
+      <h4>Intelligence vs speed</h4>
+      <p>Frontier reasoning models decode slowly; Flash tiers do not.</p>
+      <div class="cwrap"><canvas id="c2"></canvas></div>
+    </div>
+    <div class="chartbox">
+      <h4>Speed vs price</h4>
+      <p>Cheap and fast usually travel together, with exceptions.</p>
+      <div class="cwrap"><canvas id="c3"></canvas></div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>Data:</strong> Artificial Analysis model pages and per-provider benchmark pages, retrieved 24 July 2026. Intelligence = Artificial Analysis Intelligence Index v4.1 (GDPval-AA v2, 𝜏³-Banking, Terminal-Bench v2.1, SciCode, Humanity's Last Exam, GPQA Diamond, CritPt, AA-Omniscience, AA-LCR). Speed = 72-hour median output tokens/sec on the first-party API at a 10k-input-token workload. Blended price = (3 × input + 1 × output) ÷ 4 per 1M tokens.</p>
+    <p><strong>Caveats:</strong> Claude 4.5 Haiku's index is an Artificial Analysis estimate pending independent eval. GLM-5.2's speed and price are medians across 17 providers rather than first-party. Measured speeds drift by a few tokens/sec between snapshots. Cache-hit discounts (up to −90% at Anthropic and Google) are not modelled and would move prompt-heavy workloads toward the cheap corner. Mistral is excluded because its best model scores 30, below every model here; xAI has no genuinely cheap tier with live pricing, so Grok 4.3 stands in.</p>
+    <p>Source: <a href="https://artificialanalysis.ai/models">artificialanalysis.ai/models</a> · <a href="https://artificialanalysis.ai/leaderboards/models">LLM leaderboard</a></p>
+  </footer>
+</div>
+
+<script>
+/* =====================================================================  data
+   intel = AA Intelligence Index v4.1 · speed = output tok/s · p = USD per 1M  */
+const PROV = {
+  "OpenAI":       "#10a37f",
+  "Anthropic":    "#cc7a45",
+  "Google":       "#3b6fd4",
+  "SpaceXAI":     "#2f2f33",
+  "Moonshot AI":  "#7b3fb8",
+  "DeepSeek":     "#d4426e",
+  "Alibaba":      "#b07d10",
+  "Z AI":         "#17a2b8",
+  "MiniMax":      "#6b8f2e",
+  "Meta":         "#b8341f"
+};
+const MODELS = [
+  // OpenAI
+  {n:"GPT-5.6 Sol (max)",       p:"OpenAI",      t:0, intel:59, speed:64.4,  pin:5,     pout:30,   ctx:"1M",   r:1},
+  {n:"GPT-5.6 Terra (max)",     p:"OpenAI",      t:1, intel:55, speed:144.1, pin:2.5,   pout:15,   ctx:"1M",   r:1},
+  {n:"GPT-5.6 Luna (max)",      p:"OpenAI",      t:2, intel:51, speed:215.1, pin:1,     pout:6,    ctx:"1M",   r:1},
+  {n:"GPT-5.4 nano (xhigh)",    p:"OpenAI",      t:3, intel:38, speed:147.0, pin:0.2,   pout:1.25, ctx:"400k", r:1},
+  // Anthropic
+  {n:"Claude Fable 5",          p:"Anthropic",   t:0, intel:60, speed:73.5,  pin:10,    pout:50,   ctx:"1M",   r:1},
+  {n:"Claude Opus 4.8",         p:"Anthropic",   t:1, intel:56, speed:59.6,  pin:5,     pout:25,   ctx:"1M",   r:1},
+  {n:"Claude Sonnet 5",         p:"Anthropic",   t:2, intel:53, speed:74.3,  pin:2,     pout:10,   ctx:"1M",   r:1},
+  {n:"Claude 4.5 Haiku",        p:"Anthropic",   t:3, intel:24, speed:90.3,  pin:1,     pout:5,    ctx:"200k", r:0, est:1},
+  // Google
+  {n:"Gemini 3.6 Flash",        p:"Google",      t:0, intel:50, speed:275.5, pin:1.5,   pout:7.5,  ctx:"1M",   r:1},
+  {n:"Gemini 3.1 Pro",          p:"Google",      t:1, intel:46, speed:135.8, pin:2,     pout:12,   ctx:"1M",   r:1},
+  {n:"Gemini 3.5 Flash-Lite",   p:"Google",      t:2, intel:36, speed:350.2, pin:0.3,   pout:2.5,  ctx:"1M",   r:1},
+  // xAI / SpaceXAI
+  {n:"Grok 4.5 (high)",         p:"SpaceXAI",    t:0, intel:54, speed:86.7,  pin:2,     pout:6,    ctx:"500k", r:1},
+  {n:"Grok 4.3 (high)",         p:"SpaceXAI",    t:1, intel:38, speed:196.1, pin:1.25,  pout:2.5,  ctx:"1M",   r:1},
+  {n:"Grok 4.3 (non-reasoning)",p:"SpaceXAI",    t:2, intel:25, speed:86.8,  pin:1.25,  pout:2.5,  ctx:"1M",   r:0},
+  // Moonshot
+  {n:"Kimi K3",                 p:"Moonshot AI", t:0, intel:57, speed:32.8,  pin:3,     pout:15,   ctx:"1M",   r:1},
+  {n:"Kimi K2.7 Code",          p:"Moonshot AI", t:1, intel:42, speed:51.7,  pin:0.95,  pout:4,    ctx:"256k", r:1},
+  // DeepSeek
+  {n:"DeepSeek V4 Pro",         p:"DeepSeek",    t:0, intel:44, speed:67.6,  pin:0.435, pout:0.87, ctx:"1M",   r:1},
+  {n:"DeepSeek V4 Flash",       p:"DeepSeek",    t:1, intel:40, speed:120.0, pin:0.14,  pout:0.28, ctx:"1M",   r:1},
+  // Alibaba
+  {n:"Qwen3.7 Max",             p:"Alibaba",     t:0, intel:46, speed:196.3, pin:2.5,   pout:7.5,  ctx:"1M",   r:1},
+  {n:"Qwen3.7 Plus",            p:"Alibaba",     t:1, intel:39, speed:53.2,  pin:0.4,   pout:1.6,  ctx:"1M",   r:1},
+  // singles
+  {n:"GLM-5.2 (max)",           p:"Z AI",        t:0, intel:51, speed:170.4, pin:1.4,   pout:4.4,  ctx:"1M",   r:1, note:"top open-weights model"},
+  {n:"MiniMax-M3",              p:"MiniMax",     t:0, intel:44, speed:91.1,  pin:0.3,   pout:1.2,  ctx:"1M",   r:1, note:"open weights"},
+  {n:"Muse Spark 1.1 (xhigh)",  p:"Meta",        t:0, intel:51, speed:117.8, pin:1.25,  pout:4.25, ctx:"1M",   r:1}
+];
+
+/* ------------------------------------------------------- normalisation */
+const L = Math.log10;
+MODELS.forEach(d => { d.blend = (3 * d.pin + d.pout) / 4; d.c = shade(PROV[d.p], d.t); });
+const rangeOf = f => [Math.min(...MODELS.map(f)), Math.max(...MODELS.map(f))];
+const [iMin, iMax] = rangeOf(d => d.intel);
+const [sMin, sMax] = rangeOf(d => L(d.speed));
+const [bMin, bMax] = rangeOf(d => L(d.blend));
+MODELS.forEach(d => {
+  d.good  = (d.intel - iMin) / (iMax - iMin);
+  d.fast  = (L(d.speed) - sMin) / (sMax - sMin);
+  d.cheap = (bMax - L(d.blend)) / (bMax - bMin);
+});
+const pctl = (d, k) => MODELS.filter(o => o[k] <= d[k]).length / MODELS.length;
+
+function shade(hex, tier) {
+  const k = 0.17 * tier;                       // lighten deeper tiers
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  const mix = v => Math.round(v + (255 - v) * k);
+  return '#' + [mix(r), mix(g), mix(b)].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+/* ==================================================================== state */
+let weights = {fast: 1/3, cheap: 1/3, good: 1/3};
+let provider = null;                            // null = all providers
+const $ = id => document.getElementById(id);
+
+/* ================================================================ triangle */
+const VB = {w: 400, h: 356};
+const A = {x: 200, y: 26}, B = {x: 26, y: 330}, C = {x: 374, y: 330};   // good / fast / cheap
+const stage = $('stage'), svg = $('tri'), handle = $('handle');
+
+function bary(x, y) {
+  const den = (B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y);
+  let a = ((B.y - C.y) * (x - C.x) + (C.x - B.x) * (y - C.y)) / den;
+  let b = ((C.y - A.y) * (x - C.x) + (A.x - C.x) * (y - C.y)) / den;
+  let c = 1 - a - b;
+  a = Math.max(0, a); b = Math.max(0, b); c = Math.max(0, c);
+  const s = a + b + c || 1;
+  return {good: a / s, fast: b / s, cheap: c / s};
+}
+const toSvg = w => ({ x: A.x*w.good + B.x*w.fast + C.x*w.cheap, y: A.y*w.good + B.y*w.fast + C.y*w.cheap });
+const scale = () => svg.getBoundingClientRect().width / VB.w;
+
+function placeCorners() {
+  const k = scale();
+  const set = (id, sx, sy, align) => {
+    const e = $(id);
+    e.style.top = (sy * k) + 'px';
+    if (align === 'c') { e.style.left = (sx * k) + 'px'; e.style.right = 'auto'; e.style.transform = 'translateX(-50%)'; }
+    else if (align === 'l') { e.style.left = (sx * k) + 'px'; e.style.right = 'auto'; e.style.transform = 'none'; }
+    else { e.style.right = ((VB.w - sx) * k) + 'px'; e.style.left = 'auto'; e.style.transform = 'none'; e.style.textAlign = 'right'; }
+  };
+  set('cGood', A.x, A.y - 34, 'c');
+  set('cFast', B.x - 4, B.y + 8, 'l');
+  set('cCheap', C.x + 4, C.y + 8, 'r');
+}
+function placeHandle() {
+  const k = scale(), p = toSvg(weights);
+  handle.style.left = (p.x * k) + 'px';
+  handle.style.top  = (p.y * k) + 'px';
+}
+
+/* ================================================================= scoring */
+const score = (d, w) => w.fast * d.fast + w.cheap * d.cheap + w.good * d.good;
+const pool = () => provider ? MODELS.filter(d => d.p === provider) : MODELS;
+const money = v => '$' + (v < 1 ? (+v.toFixed(3)).toString() : v.toFixed(2).replace(/\.00$/, ''));
+
+function phrase(d) {
+  const f = pctl(d,'fast'), c = pctl(d,'cheap'), g = pctl(d,'good');
+  const a = f > .8 ? 'one of the fastest here at ' + d.speed + ' tok/s'
+          : f > .5 ? 'quicker than most at ' + d.speed + ' tok/s'
+                   : 'slow to decode at ' + d.speed + ' tok/s';
+  const b = c > .8 ? 'very cheap at ' + money(d.blend) + ' blended'
+          : c > .5 ? 'moderately priced at ' + money(d.blend) + ' blended'
+                   : 'expensive at ' + money(d.blend) + ' blended';
+  const e = g > .8 ? 'near the top of the Intelligence Index (' + d.intel + ')'
+          : g > .5 ? 'solidly capable (' + d.intel + ')'
+                   : 'the weakest tier on intelligence (' + d.intel + ')';
+  return 'It is ' + a + ', ' + b + ', and ' + e + (d.note ? ' — ' + d.note : '') + '.';
+}
+
+function render() {
+  $('wFast').textContent  = Math.round(weights.fast  * 100) + '%';
+  $('wCheap').textContent = Math.round(weights.cheap * 100) + '%';
+  $('wGood').textContent  = Math.round(weights.good  * 100) + '%';
+
+  const ranked = pool().map(d => ({d, s: score(d, weights)})).sort((x, y) => y.s - x.s);
+  const d = ranked[0].d;
+
+  $('card').style.borderLeftColor = d.c;
+  $('wName').textContent = d.n;
+  $('wMaker').textContent = d.p + ' · ' + (d.r ? 'reasoning' : 'non-reasoning') + (d.est ? ' · index estimated' : '');
+  $('wWhy').textContent = phrase(d);
+  [['Fast','fast'],['Cheap','cheap'],['Good','good']].forEach(([lab, k]) => {
+    $('b' + lab).style.width = (d[k] * 100).toFixed(1) + '%';
+    $('v' + lab).textContent = Math.round(d[k] * 100);
+  });
+  $('sIntel').textContent = d.intel + (d.est ? ' (est.)' : '');
+  $('sSpeed').textContent = d.speed + ' t/s';
+  $('sBlend').textContent = money(d.blend);
+  $('sIn').textContent  = money(d.pin);
+  $('sOut').textContent = money(d.pout);
+  $('sCtx').textContent = d.ctx;
+
+  const best = ranked[0].s || 1;
+  $('rank').innerHTML = ranked.slice(1, 7).map(r =>
+    '<tr><td><span class="nm"><span class="swatch" style="background:' + r.d.c + '"></span>' + r.d.n + '</span></td>' +
+    '<td class="num scorecell"><span class="scorebg" style="width:' + ((r.s / best) * 100).toFixed(1) + '%"></span><span>' + Math.round((r.s / best) * 100) + '%</span></td>' +
+    '<td class="num">' + r.d.intel + '</td>' +
+    '<td class="num">' + Math.round(r.d.speed) + '</td>' +
+    '<td class="num">' + money(r.d.blend) + '</td></tr>').join('')
+    || '<tr><td colspan="5" class="num">Only one model from this provider.</td></tr>';
+
+  handle.style.borderColor = d.c;
+  $('count').textContent = pool().length + ' of ' + MODELS.length + ' models';
+  placeHandle();
+  paintCharts(d);
+}
+
+/* ============================================================ interaction */
+function fromEvent(e) {
+  const r = svg.getBoundingClientRect(), k = scale();
+  weights = bary((e.clientX - r.left) / k, (e.clientY - r.top) / k);
+  syncPresets();
+  render();
+}
+let dragging = false;
+stage.addEventListener('pointerdown', e => { dragging = true; stage.setPointerCapture(e.pointerId); fromEvent(e); });
+stage.addEventListener('pointermove', e => { if (dragging) fromEvent(e); });
+stage.addEventListener('pointerup', () => { dragging = false; });
+stage.addEventListener('pointercancel', () => { dragging = false; });
+
+const PRESETS = [
+  {label:'Balanced',            w:{fast:1/3,  cheap:1/3,  good:1/3}},
+  {label:'Hardest reasoning',   w:{fast:0.05, cheap:0.05, good:0.90}},
+  {label:'Real-time chat',      w:{fast:0.60, cheap:0.25, good:0.15}},
+  {label:'Bulk classification', w:{fast:0.25, cheap:0.65, good:0.10}},
+  {label:'Cheap but capable',   w:{fast:0.10, cheap:0.45, good:0.45}},
+  {label:'Fast and smart',      w:{fast:0.45, cheap:0.05, good:0.50}}
+];
+$('presets').innerHTML = PRESETS.map((p, i) => '<button data-i="' + i + '">' + p.label + '</button>').join('');
+$('presets').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  weights = {...PRESETS[+b.dataset.i].w}; syncPresets(); render();
+});
+function syncPresets() {
+  [...$('presets').querySelectorAll('button')].forEach(b => {
+    const w = PRESETS[+b.dataset.i].w;
+    const near = Math.abs(w.fast - weights.fast) < .02 && Math.abs(w.cheap - weights.cheap) < .02 && Math.abs(w.good - weights.good) < .02;
+    b.setAttribute('aria-pressed', near ? 'true' : 'false');
+  });
+}
+
+$('chips').innerHTML = '<button class="chip" data-p="" aria-pressed="true">All providers</button>' +
+  Object.keys(PROV).map(p =>
+    '<button class="chip" data-p="' + p + '" aria-pressed="false"><span class="dot" style="background:' + PROV[p] + '"></span>' + p + '</button>').join('');
+$('chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  provider = b.dataset.p || null;
+  [...$('chips').querySelectorAll('.chip')].forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+  render();
+});
+
+/* ================================================================== charts */
+const GRID = '#eeece6', TICK = '#8d887e';
+const dim = hex => hex + '33';
+function axis(title, log) {
+  return {
+    type: log ? 'logarithmic' : 'linear',
+    title: {display: true, text: title, color: TICK, font: {size: 10}},
+    grid: {color: GRID}, border: {color: GRID},
+    ticks: {color: TICK, font: {size: 9}, maxTicksLimit: 6,
+            callback: v => log ? (v >= 1 ? v : (+v.toFixed(2))) : v}
+  };
+}
+function makeChart(el, xKey, yKey, xTitle, yTitle, xLog, yLog) {
+  return new Chart(el, {
+    type: 'bubble',
+    data: {datasets: [{
+      data: MODELS.map(d => ({x: d[xKey], y: d[yKey], r: 4 + 8 * d.fast, m: d})),
+      borderWidth: 1.25
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: {padding: {top: 4, right: 6}},
+      scales: {x: axis(xTitle, xLog), y: axis(yTitle, yLog)},
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          displayColors: false, backgroundColor: '#25231f', padding: 8,
+          callbacks: {
+            title: c => c[0].raw.m.n,
+            label: c => {
+              const m = c[0] ? c[0].raw.m : c.raw.m;
+              return [m.p, 'Index ' + m.intel + '  ·  ' + m.speed + ' t/s  ·  ' + money(m.blend) + ' /1M'];
+            }
+          }
+        }
+      }
+    }
+  });
+}
+const charts = [
+  makeChart($('c1'), 'blend', 'intel', 'blended $ / 1M tokens (log)', 'intelligence index', true, false),
+  makeChart($('c2'), 'speed', 'intel', 'output tokens / sec (log)', 'intelligence index', true, false),
+  makeChart($('c3'), 'blend', 'speed', 'blended $ / 1M tokens (log)', 'output tokens / sec (log)', true, true)
+];
+function paintCharts(sel) {
+  const inPool = new Set(pool().map(d => d.n));
+  charts.forEach(ch => {
+    const ds = ch.data.datasets[0];
+    ds.backgroundColor = ds.data.map(pt => {
+      const m = pt.m;
+      if (m === sel) return m.c;
+      return inPool.has(m.n) ? m.c + '59' : '#e9e7e1';
+    });
+    ds.borderColor = ds.data.map(pt => {
+      const m = pt.m;
+      if (m === sel) return '#25231f';
+      return inPool.has(m.n) ? m.c + 'aa' : '#e0ded8';
+    });
+    ds.data.forEach(pt => { pt.r = (pt.m === sel ? 11 : 4 + 7 * pt.m.fast); });
+    ch.update('none');
+  });
+}
+
+/* ==================================================================== boot */
+function boot() { placeCorners(); placeHandle(); }
+window.addEventListener('resize', () => { placeCorners(); placeHandle(); });
+boot();
+syncPresets();
+render();
+console.log('ready:', MODELS.length, 'models,', Object.keys(PROV).length, 'providers');
+console.log('corners →',
+  'GOOD:', pool().map(d => ({d, s: score(d, {fast:0,cheap:0,good:1})})).sort((a,b)=>b.s-a.s)[0].d.n,
+  '| FAST:', pool().map(d => ({d, s: score(d, {fast:1,cheap:0,good:0})})).sort((a,b)=>b.s-a.s)[0].d.n,
+  '| CHEAP:', pool().map(d => ({d, s: score(d, {fast:0,cheap:1,good:0})})).sort((a,b)=>b.s-a.s)[0].d.n,
+  '| CENTER:', pool().map(d => ({d, s: score(d, {fast:1/3,cheap:1/3,good:1/3})})).sort((a,b)=>b.s-a.s)[0].d.n);
+</script>
+</body>
+</html>
